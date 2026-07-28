@@ -25,6 +25,8 @@ For the Android Share Sheet companion setup and safe release process, read [Andr
 
 Read [Accuracy and QA Report](docs/ACCURACY_AND_QA_REPORT.md) for reproducible baseline checks, live-dashboard evidence, known limitations, and the path to a measured accuracy benchmark.
 
+Read [Production Accuracy Evaluation Report](docs/ACCURACY_EVALUATION_REPORT.md) for the versioned v1 corpus, category metrics, security checks, audit fixes, and live-test screenshots.
+
 ## Features in this milestone
 
 - FastAPI application factory and OpenAPI documentation
