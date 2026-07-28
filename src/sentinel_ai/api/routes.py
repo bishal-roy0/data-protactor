@@ -1,9 +1,11 @@
 from fastapi import APIRouter, status
 
-from sentinel_ai.api.schemas import HealthResponse
+from sentinel_ai.api.schemas import AnalyzeRequest, AnalyzeResponse, HealthResponse
 from sentinel_ai.core.config import get_settings
+from sentinel_ai.services.threat_analyzer import ThreatAnalyzer
 
 router = APIRouter(tags=["System"])
+threat_analyzer = ThreatAnalyzer()
 
 
 @router.get(
@@ -21,3 +23,16 @@ async def health_check() -> HealthResponse:
         service=settings.app_name,
         environment=settings.environment,
     )
+
+
+@router.post(
+    "/analyze",
+    response_model=AnalyzeResponse,
+    status_code=status.HTTP_200_OK,
+    tags=["Threat analysis"],
+    summary="Analyze text and URLs for common threat signals",
+)
+async def analyze_content(payload: AnalyzeRequest) -> AnalyzeResponse:
+    """Return a transparent baseline risk assessment without opening supplied URLs."""
+
+    return threat_analyzer.analyze(payload)

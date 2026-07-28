@@ -15,14 +15,18 @@ Sentinel AI is a REST API that helps communication platforms identify phishing, 
 
 Not sure where code belongs? See [Project Structure](docs/PROJECT_STRUCTURE.md). It maps each file to its purpose in plain language.
 
+Read the endpoint contract in the [API Reference](docs/API_REFERENCE.md), and see [SECURITY.md](SECURITY.md) for reporting and deployment safety guidance.
+
 ## Features in this milestone
 
 - FastAPI application factory and OpenAPI documentation
 - `GET /health` endpoint for service monitoring
+- `POST /analyze` endpoint for baseline text and URL threat analysis
 - Pydantic response schema
 - Environment-based configuration
 - Consistent fallback response for unexpected errors
 - Automated health endpoint test
+- Automated threat-analysis endpoint tests
 - GitHub Actions workflow that runs tests on pushes and pull requests
 
 ## Requirements
@@ -54,6 +58,7 @@ The API is available at `http://127.0.0.1:8000`.
 
 - Interactive documentation: `http://127.0.0.1:8000/docs`
 - Health endpoint: `GET http://127.0.0.1:8000/health`
+- Threat analysis: `POST http://127.0.0.1:8000/analyze`
 
 Example response:
 
@@ -78,4 +83,4 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before making changes. It explains the p
 
 ## Planned next milestone
 
-Implement a validated `POST /analyze` contract for text and URLs, including structured threat scores, explanations, and recommended actions. OpenAI-powered analysis follows after that contract is in place.
+Add OpenAI-assisted contextual analysis while preserving the baseline analyzer as a safe fallback when an API key or external AI service is unavailable.
