@@ -17,6 +17,8 @@ Not sure where code belongs? See [Project Structure](docs/PROJECT_STRUCTURE.md).
 
 Read the endpoint contract in the [API Reference](docs/API_REFERENCE.md), and see [SECURITY.md](SECURITY.md) for reporting and deployment safety guidance.
 
+For a visual explanation of each processing step and the code behind it, read [How Sentinel AI Works](docs/ARCHITECTURE.md).
+
 ## Features in this milestone
 
 - FastAPI application factory and OpenAPI documentation
