@@ -34,8 +34,11 @@ flowchart LR
 | Detects safety signals and calculates results | `src/sentinel_ai/services/threat_analyzer.py` |
 | Looks up optional URL reputation | `src/sentinel_ai/services/reputation.py` |
 | Analyzes validated images when configured | `src/sentinel_ai/services/image_analyzer.py` |
+| Android Share Sheet companion | `android/app/` |
 | Verifies endpoint behavior | `tests/test_health.py` |
 
 ## Safety boundary
 
 The local baseline is deliberately deterministic and explainable. It is advisory, not a replacement for human review or antivirus software. It never crawls submitted URLs or performs a complete device or malware scan.
+
+The Android companion receives only content a person deliberately shares through Android's Share Sheet. It is not a direct integration with private messaging services and does not perform background scanning.

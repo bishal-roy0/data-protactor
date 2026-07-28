@@ -54,6 +54,10 @@ Accepts a single `image` multipart field. JPG, PNG, and WEBP are supported up to
 
 When `OPENAI_API_KEY` is configured, Karna can request an optional visual assessment for scam, fake-login, QR-risk, impersonation, and social-engineering cues. The image is sent to OpenAI only for that configured assessment; Karna does not persist the upload. Without the key, it returns a transparent fallback rather than claiming visual malware detection.
 
+## `GET /config/public`
+
+Returns only configuration that is safe for the public dashboard. At present it can return `android_app_download_url`, the HTTPS address of a real signed Android release. It never returns OpenAI, VirusTotal, or other secret values.
+
 ## Optional enrichment
 
 When `VIRUSTOTAL_API_KEY` is configured, Karna can look up existing URL reputation data. It never opens, downloads, executes, or crawls submitted URLs.

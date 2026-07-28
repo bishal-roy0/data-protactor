@@ -21,6 +21,8 @@ For a visual explanation of each processing step and the code behind it, read [H
 
 For the future personal mobile-client pathway, read [Mobile Integration](docs/MOBILE_INTEGRATION.md).
 
+For the Android Share Sheet companion setup and safe release process, read [Android Companion](docs/ANDROID_COMPANION.md).
+
 ## Features in this milestone
 
 - FastAPI application factory and OpenAPI documentation
@@ -86,6 +88,8 @@ pytest
 ## Optional API keys
 
 `OPENAI_API_KEY` enables optional visual assessment for submitted images. `VIRUSTOTAL_API_KEY` enables an existing URL-reputation lookup. Both are optional: Karna continues to run its local, explainable analysis when either service is unavailable. Never commit real keys to GitHub.
+
+`ANDROID_APP_DOWNLOAD_URL` is optional and public. Set it only after you have a tested, signed Android release; otherwise the dashboard keeps its Android download control disabled.
 
 ## Contributing
 

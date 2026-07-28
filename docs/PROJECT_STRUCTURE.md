@@ -21,6 +21,8 @@ data-protactor/
 └── README.md                       # Project overview and setup instructions
 ```
 
+The Android companion lives in `android/app/`: `MainActivity.kt` receives Android Share Sheet content, `share/` validates it, `data/` calls the Karna API, and `ui/` displays the review and advisory result.
+
 ## Where to make common changes
 
 | If you want to... | Edit this file or folder |
@@ -32,6 +34,7 @@ data-protactor/
 | Change public branding or optional API keys | `src/sentinel_ai/core/config.py` and `.env.example` |
 | Change URL reputation behavior | `src/sentinel_ai/services/reputation.py` |
 | Change image-analysis behavior | `src/sentinel_ai/services/image_analyzer.py` |
+| Change Android Share Sheet handling | `android/app/src/main/java/com/karna/companion/share/` |
 | Add a test | `tests/` |
 | Explain a project decision | `docs/` |
 | Change packages used by the running API | `requirements.txt` |
