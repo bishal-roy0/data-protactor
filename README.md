@@ -88,6 +88,10 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before making changes. It explains the p
 
 This repository includes `render.yaml`. In Render, create a **Blueprint** from this GitHub repository and select the `main` branch. Render will install the dependencies, start the FastAPI service, and expose the dashboard and API through one public URL. The configured health check is `/health`.
 
+## Deploy free with Vercel
+
+For a personal or hackathon deployment, Vercel's free Hobby plan can deploy this FastAPI project directly from GitHub. Import this repository in Vercel and select the `main` branch. The included `src/index.py` entry point exposes the same dashboard and API without changing the application code.
+
 ## Planned next milestone
 
 Add OpenAI-assisted contextual analysis while preserving the baseline analyzer as a safe fallback when an API key or external AI service is unavailable.
