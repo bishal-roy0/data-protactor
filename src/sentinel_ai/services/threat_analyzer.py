@@ -173,7 +173,12 @@ class ThreatAnalyzer:
             return ThreatCategory.PHISHING
         if any("impersonation" in item.signal.lower() for item in evidence):
             return ThreatCategory.IMPERSONATION
-        if any("URL" in item.signal or "domain" in item.signal.lower() for item in evidence):
+        if any(
+            "url" in item.signal.lower()
+            or "domain" in item.signal.lower()
+            or "media link" in item.signal.lower()
+            for item in evidence
+        ):
             return ThreatCategory.SUSPICIOUS_URL
         return ThreatCategory.SOCIAL_ENGINEERING
 

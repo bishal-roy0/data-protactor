@@ -23,6 +23,8 @@ For the future personal mobile-client pathway, read [Mobile Integration](docs/MO
 
 For the Android Share Sheet companion setup and safe release process, read [Android Companion](docs/ANDROID_COMPANION.md).
 
+Read [Accuracy and QA Report](docs/ACCURACY_AND_QA_REPORT.md) for reproducible baseline checks, live-dashboard evidence, known limitations, and the path to a measured accuracy benchmark.
+
 ## Features in this milestone
 
 - FastAPI application factory and OpenAPI documentation
