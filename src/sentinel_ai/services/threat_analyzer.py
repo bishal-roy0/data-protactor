@@ -55,6 +55,13 @@ TEXT_RULES = (
         weight=30,
         category=ThreatCategory.SOCIAL_ENGINEERING,
     ),
+    DetectionRule(
+        terms=("you have won", "you've won", "claim your prize", "lottery winner", "processing fee"),
+        signal="Prize or lottery scam",
+        explanation="Unexpected prize, lottery, or fee requests are common scam patterns and should be independently verified.",
+        weight=30,
+        category=ThreatCategory.SCAM,
+    ),
 )
 
 
@@ -173,6 +180,8 @@ class ThreatAnalyzer:
             return ThreatCategory.PHISHING
         if any("impersonation" in item.signal.lower() for item in evidence):
             return ThreatCategory.IMPERSONATION
+        if any("scam" in item.signal.lower() for item in evidence):
+            return ThreatCategory.SCAM
         if any(
             "url" in item.signal.lower()
             or "domain" in item.signal.lower()
