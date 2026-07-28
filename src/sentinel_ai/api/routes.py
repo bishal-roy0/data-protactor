@@ -4,6 +4,7 @@ from sentinel_ai.api.schemas import (
     AnalyzeRequest,
     AnalyzeResponse,
     HealthResponse,
+    PublicConfigResponse,
     RecommendedAction,
     ThreatCategory,
 )
@@ -30,6 +31,15 @@ async def health_check() -> HealthResponse:
         status="healthy",
         service=settings.app_name,
         environment=settings.environment,
+    )
+
+
+@router.get("/config/public", response_model=PublicConfigResponse)
+async def public_configuration() -> PublicConfigResponse:
+    """Expose explicitly public dashboard configuration without exposing API keys."""
+
+    return PublicConfigResponse(
+        android_app_download_url=get_settings().android_app_download_url,
     )
 
 

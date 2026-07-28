@@ -11,6 +11,12 @@ class HealthResponse(BaseModel):
     environment: str = Field(description="Active deployment environment.")
 
 
+class PublicConfigResponse(BaseModel):
+    """Non-sensitive configuration that may be displayed by the dashboard."""
+
+    android_app_download_url: str | None = None
+
+
 class RiskLevel(StrEnum):
     SAFE = "safe"
     LOW = "low"

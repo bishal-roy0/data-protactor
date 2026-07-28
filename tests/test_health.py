@@ -22,6 +22,14 @@ def test_dashboard_is_available() -> None:
 
     assert response.status_code == 200
     assert "Karna" in response.text
+    assert "Download Karna for Android (coming soon)" in response.text
+
+
+def test_public_configuration_exposes_no_secrets() -> None:
+    response = client.get("/config/public")
+
+    assert response.status_code == 200
+    assert response.json() == {"android_app_download_url": None}
 
 
 def test_analyze_rejects_empty_content() -> None:

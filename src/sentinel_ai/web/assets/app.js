@@ -5,6 +5,27 @@ const result = document.querySelector("#result");
 const emptyResult = document.querySelector("#empty-result");
 const title = document.querySelector("#result-title");
 
+loadAndroidDownloadLink();
+
+async function loadAndroidDownloadLink() {
+  const link = document.querySelector("#android-download-link");
+  try {
+    const response = await fetch("/config/public");
+    const config = await response.json();
+    if (!response.ok || !config.android_app_download_url) return;
+    const url = new URL(config.android_app_download_url);
+    if (url.protocol !== "https:") return;
+    link.href = url.href;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.classList.remove("is-disabled");
+    link.removeAttribute("aria-disabled");
+    link.textContent = "Download Karna for Android";
+  } catch (_) {
+    // The disabled state is intentional when no public release is configured.
+  }
+}
+
 const riskColors = { safe: "#4ce8c4", low: "#35a8ff", medium: "#ffc857", high: "#ff4fa3", critical: "#ff4d5c" };
 
 form.addEventListener("submit", async (event) => {
