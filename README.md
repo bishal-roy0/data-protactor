@@ -1,8 +1,19 @@
 # Sentinel AI
 
-Sentinel AI is a REST API that helps communication platforms identify phishing, social-engineering, and URL-based threats before content reaches users.
+Sentinel AI is a REST API that helps communication platforms identify phishing, social-engineering, and URL-based threats before content reaches users. It is an integration-ready security layer, not a messaging application.
 
-This repository currently contains the API foundation. Threat analysis and OpenAI integration will be added in later milestones.
+> **Project status:** API foundation complete. Threat-analysis endpoints and OpenAI integration are planned next.
+
+## What Sentinel AI will do
+
+- Analyze text messages and URLs
+- Detect phishing and social-engineering attempts
+- Return a threat score and clear explanation
+- Recommend a safe next action
+
+## Repository guide
+
+Not sure where code belongs? See [Project Structure](docs/PROJECT_STRUCTURE.md). It maps each file to its purpose in plain language.
 
 ## Features in this milestone
 
@@ -12,6 +23,7 @@ This repository currently contains the API foundation. Threat analysis and OpenA
 - Environment-based configuration
 - Consistent fallback response for unexpected errors
 - Automated health endpoint test
+- GitHub Actions workflow that runs tests on pushes and pull requests
 
 ## Requirements
 
@@ -22,7 +34,7 @@ This repository currently contains the API foundation. Threat analysis and OpenA
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 ```
 
 Copy the example environment file if you need local configuration:
@@ -55,13 +67,14 @@ Example response:
 
 ## Run tests
 
-Install the test dependency, then run:
-
 ```powershell
-python -m pip install pytest httpx
 $env:PYTHONPATH = "src"
 pytest
 ```
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before making changes. It explains the project conventions, test command, and where each type of change belongs.
 
 ## Planned next milestone
 

@@ -1,0 +1,40 @@
+# Project Structure
+
+This guide explains where each part of Sentinel AI lives. Start here if you are new to the project.
+
+```text
+data-protactor/
+├── .github/workflows/ci.yml        # Automated GitHub test workflow
+├── docs/                           # Plain-language project documentation
+├── src/sentinel_ai/                # Application source code
+│   ├── main.py                     # Starts and configures the FastAPI application
+│   ├── api/                        # HTTP endpoints and their JSON models
+│   │   ├── routes.py               # URL paths such as /health and future /analyze
+│   │   └── schemas.py              # Defines the JSON fields returned by the API
+│   └── core/                       # Shared application behaviour
+│       ├── config.py               # Reads configuration from environment variables
+│       └── errors.py               # Provides safe responses for server errors
+├── tests/                          # Automated checks for API behaviour
+├── .env.example                    # Example local configuration; contains no secrets
+├── requirements.txt                # Packages required to run the API
+├── requirements-dev.txt            # Extra packages required to run tests
+└── README.md                       # Project overview and setup instructions
+```
+
+## Where to make common changes
+
+| If you want to... | Edit this file or folder |
+| --- | --- |
+| Add or change an API URL | `src/sentinel_ai/api/routes.py` |
+| Change a request or response JSON field | `src/sentinel_ai/api/schemas.py` |
+| Change application settings | `src/sentinel_ai/core/config.py` and `.env.example` |
+| Change how startup is configured | `src/sentinel_ai/main.py` |
+| Add a test | `tests/` |
+| Explain a project decision | `docs/` |
+| Change packages used by the running API | `requirements.txt` |
+
+## Important safety notes
+
+- Never commit a real `.env` file or API key. Use `.env.example` only as a template.
+- Keep threat-analysis logic separate from HTTP route definitions. Routes should accept requests and return responses; analysis services will live in their own module in a future milestone.
+- Add a matching test whenever an endpoint or response model changes.
