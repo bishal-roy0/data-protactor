@@ -1,4 +1,4 @@
-# Contributing to Sentinel AI
+# Contributing to Karna
 
 ## Before you make a change
 

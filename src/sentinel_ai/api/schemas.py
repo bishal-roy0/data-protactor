@@ -24,12 +24,17 @@ class ThreatCategory(StrEnum):
     PHISHING = "phishing"
     SOCIAL_ENGINEERING = "social_engineering"
     SUSPICIOUS_URL = "suspicious_url"
+    MALWARE_DOWNLOAD = "malware_download"
+    SCAM = "scam"
+    IMPERSONATION = "impersonation"
+    UNSAFE_ATTACHMENT = "unsafe_attachment"
 
 
 class RecommendedAction(StrEnum):
     ALLOW = "allow"
     CAUTION = "show_caution"
     BLOCK = "block"
+    QUARANTINE = "quarantine"
 
 
 class AnalyzeRequest(BaseModel):

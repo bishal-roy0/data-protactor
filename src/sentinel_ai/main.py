@@ -10,13 +10,13 @@ from sentinel_ai.core.errors import unhandled_exception_handler
 
 
 def create_application() -> FastAPI:
-    """Build and configure the Sentinel AI ASGI application."""
+    """Build and configure the Karna ASGI application."""
 
     settings = get_settings()
     application = FastAPI(
         title=settings.app_name,
-        description="AI-powered security analysis for communication content.",
-        version="0.1.0",
+        description="Communication threat analysis for authorized apps and personal safety workflows.",
+        version="0.2.0",
     )
     application.include_router(router)
     application.add_exception_handler(Exception, unhandled_exception_handler)

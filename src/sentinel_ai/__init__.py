@@ -1,1 +1,1 @@
-"""Sentinel AI cybersecurity analysis service."""
+"""Karna cybersecurity analysis service."""

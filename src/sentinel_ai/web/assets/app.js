@@ -12,11 +12,19 @@ form.addEventListener("submit", async (event) => {
   error.textContent = "";
   const text = document.querySelector("#message").value.trim();
   const urls = document.querySelector("#urls").value.split("\n").map((url) => url.trim()).filter(Boolean);
-  if (!text && !urls.length) { error.textContent = "Add a message, a URL, or both before analyzing."; return; }
+  const image = document.querySelector("#image").files[0];
+  if (!text && !urls.length && !image) { error.textContent = "Add a message, a URL, or an image before analyzing."; return; }
   submitButton.disabled = true;
   submitButton.innerHTML = "Checking signals…";
   try {
-    const response = await fetch("/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: text || null, urls }) });
+    let response;
+    if (image) {
+      const imageForm = new FormData();
+      imageForm.append("image", image);
+      response = await fetch("/analyze/image", { method: "POST", body: imageForm });
+    } else {
+      response = await fetch("/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: text || null, urls }) });
+    }
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.detail?.[0]?.msg || payload.detail || "Analysis could not be completed.");
     renderResult(payload);

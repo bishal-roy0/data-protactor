@@ -28,6 +28,13 @@ TEXT_RULES = (
         category=ThreatCategory.PHISHING,
     ),
     DetectionRule(
+        terms=("i am your boss", "i'm your boss", "ceo needs", "government fine"),
+        signal="Possible impersonation pressure",
+        explanation="The message uses an authority claim that can be used to pressure a recipient into acting.",
+        weight=25,
+        category=ThreatCategory.IMPERSONATION,
+    ),
+    DetectionRule(
         terms=("urgent", "immediately", "act now", "limited time"),
         signal="Urgency pressure",
         explanation="Urgency can be used to discourage careful verification before acting.",
@@ -112,6 +119,31 @@ class ThreatAnalyzer:
                         weight=20,
                     )
                 )
+            lowered_url = url.casefold()
+            if any(parameter in lowered_url for parameter in ("?url=", "?redirect=", "?next=", "?continue=")):
+                evidence.append(
+                    ThreatEvidence(
+                        signal="Redirect-style URL",
+                        explanation="The link contains a redirect parameter that can conceal its final destination.",
+                        weight=20,
+                    )
+                )
+            if any(lowered_url.split("?", maxsplit=1)[0].endswith(extension) for extension in (".exe", ".msi", ".apk", ".dmg", ".iso", ".scr", ".bat", ".cmd", ".zip", ".rar")):
+                evidence.append(
+                    ThreatEvidence(
+                        signal="Executable or archive download link",
+                        explanation="The URL points to a downloadable executable or archive. Verify the publisher before downloading.",
+                        weight=45,
+                    )
+                )
+            if any(marker in lowered_url for marker in ("private-video", "watch-now", "video-download")):
+                evidence.append(
+                    ThreatEvidence(
+                        signal="Potentially deceptive media link",
+                        explanation="The media-link wording is commonly used to lure recipients to unverified destinations.",
+                        weight=20,
+                    )
+                )
         return evidence
 
     @staticmethod
@@ -135,8 +167,12 @@ class ThreatAnalyzer:
     def _primary_category(evidence: list[ThreatEvidence]) -> ThreatCategory:
         if not evidence:
             return ThreatCategory.SAFE
+        if any("download" in item.signal.lower() for item in evidence):
+            return ThreatCategory.MALWARE_DOWNLOAD
         if any(item.signal == "Credential request" for item in evidence):
             return ThreatCategory.PHISHING
+        if any("impersonation" in item.signal.lower() for item in evidence):
+            return ThreatCategory.IMPERSONATION
         if any("URL" in item.signal or "domain" in item.signal.lower() for item in evidence):
             return ThreatCategory.SUSPICIOUS_URL
         return ThreatCategory.SOCIAL_ENGINEERING
@@ -149,7 +185,9 @@ class ThreatAnalyzer:
 
     @staticmethod
     def _recommended_action(risk_level: RiskLevel) -> RecommendedAction:
-        if risk_level in {RiskLevel.HIGH, RiskLevel.CRITICAL}:
+        if risk_level is RiskLevel.CRITICAL:
+            return RecommendedAction.QUARANTINE
+        if risk_level is RiskLevel.HIGH:
             return RecommendedAction.BLOCK
         if risk_level in {RiskLevel.LOW, RiskLevel.MEDIUM}:
             return RecommendedAction.CAUTION

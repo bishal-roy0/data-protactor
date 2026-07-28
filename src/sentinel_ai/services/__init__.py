@@ -1,1 +1,1 @@
-"""Domain services that implement Sentinel AI analysis behavior."""
+"""Domain services that implement Karna analysis behavior."""

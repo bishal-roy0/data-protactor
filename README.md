@@ -1,12 +1,12 @@
-# Sentinel AI
+# Karna
 
-Sentinel AI is a REST API that helps communication platforms identify phishing, social-engineering, and URL-based threats before content reaches users. It is an integration-ready security layer, not a messaging application.
+Karna is a REST API and personal safety companion that helps authorized apps identify phishing, social-engineering, suspicious URLs, and unsafe attachments before a person acts. It is an integration-ready security layer, not a messaging application or device antivirus.
 
-> **Project status:** API foundation complete. Threat-analysis endpoints and OpenAI integration are planned next.
+> **Project status:** baseline text, URL, and image analysis is available. Optional OpenAI vision and VirusTotal reputation enrichment require their own API keys.
 
-## What Sentinel AI will do
+## What Karna does
 
-- Analyze text messages and URLs
+- Analyze text messages, URLs, and selected images
 - Detect phishing and social-engineering attempts
 - Return a threat score and clear explanation
 - Recommend a safe next action
@@ -17,7 +17,9 @@ Not sure where code belongs? See [Project Structure](docs/PROJECT_STRUCTURE.md).
 
 Read the endpoint contract in the [API Reference](docs/API_REFERENCE.md), and see [SECURITY.md](SECURITY.md) for reporting and deployment safety guidance.
 
-For a visual explanation of each processing step and the code behind it, read [How Sentinel AI Works](docs/ARCHITECTURE.md).
+For a visual explanation of each processing step and the code behind it, read [How Karna Works](docs/ARCHITECTURE.md).
+
+For the future personal mobile-client pathway, read [Mobile Integration](docs/MOBILE_INTEGRATION.md).
 
 ## Features in this milestone
 
@@ -62,13 +64,14 @@ The API is available at `http://127.0.0.1:8000`.
 - Interactive documentation: `http://127.0.0.1:8000/docs`
 - Health endpoint: `GET http://127.0.0.1:8000/health`
 - Threat analysis: `POST http://127.0.0.1:8000/analyze`
+- Image threat analysis: `POST http://127.0.0.1:8000/analyze/image`
 
 Example response:
 
 ```json
 {
   "status": "healthy",
-  "service": "Sentinel AI",
+  "service": "Karna",
   "environment": "development"
 }
 ```
@@ -79,6 +82,10 @@ Example response:
 $env:PYTHONPATH = "src"
 pytest
 ```
+
+## Optional API keys
+
+`OPENAI_API_KEY` enables optional visual assessment for submitted images. `VIRUSTOTAL_API_KEY` enables an existing URL-reputation lookup. Both are optional: Karna continues to run its local, explainable analysis when either service is unavailable. Never commit real keys to GitHub.
 
 ## Contributing
 
@@ -92,6 +99,6 @@ This repository includes `render.yaml`. In Render, create a **Blueprint** from t
 
 For a personal or hackathon deployment, Vercel's free Hobby plan can deploy this FastAPI project directly from GitHub. Import this repository in Vercel and select the `main` branch. The included `src/index.py` entry point exposes the same dashboard and API without changing the application code.
 
-## Planned next milestone
+## Safety boundary
 
-Add OpenAI-assisted contextual analysis while preserving the baseline analyzer as a safe fallback when an API key or external AI service is unavailable.
+Karna is advisory. It does not scan an entire device, remove malware, block phone downloads, intercept SMS, or access private messages without an authorized integration. See [Mobile Integration](docs/MOBILE_INTEGRATION.md) for the future mobile-client pathway.

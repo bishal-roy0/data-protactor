@@ -1,6 +1,6 @@
 # Project Structure
 
-This guide explains where each part of Sentinel AI lives. Start here if you are new to the project.
+This guide explains where each part of Karna lives. Start here if you are new to the project.
 
 ```text
 data-protactor/
@@ -29,6 +29,9 @@ data-protactor/
 | Change a request or response JSON field | `src/sentinel_ai/api/schemas.py` |
 | Change application settings | `src/sentinel_ai/core/config.py` and `.env.example` |
 | Change how startup is configured | `src/sentinel_ai/main.py` |
+| Change public branding or optional API keys | `src/sentinel_ai/core/config.py` and `.env.example` |
+| Change URL reputation behavior | `src/sentinel_ai/services/reputation.py` |
+| Change image-analysis behavior | `src/sentinel_ai/services/image_analyzer.py` |
 | Add a test | `tests/` |
 | Explain a project decision | `docs/` |
 | Change packages used by the running API | `requirements.txt` |
@@ -36,5 +39,5 @@ data-protactor/
 ## Important safety notes
 
 - Never commit a real `.env` file or API key. Use `.env.example` only as a template.
-- Keep threat-analysis logic separate from HTTP route definitions. Routes should accept requests and return responses; analysis services will live in their own module in a future milestone.
+- Keep threat-analysis logic separate from HTTP route definitions. Routes accept requests and return responses; analysis services contain the security decisions.
 - Add a matching test whenever an endpoint or response model changes.

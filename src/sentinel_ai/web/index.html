@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Sentinel AI communication threat analysis dashboard." />
-    <title>Sentinel AI | Threat Analysis</title>
+    <meta name="description" content="Karna communication threat analysis dashboard." />
+    <title>Karna | Personal Safety Analysis</title>
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
   <body>
@@ -14,11 +14,11 @@
           <div class="brand-mark" aria-hidden="true">S</div>
           <div>
             <p class="eyebrow">COMMUNICATION SAFETY LAYER</p>
-            <h1>Sentinel <span>AI</span></h1>
+            <h1>Karna <span>Safety</span></h1>
           </div>
           <a class="docs-link" href="/docs" target="_blank" rel="noreferrer">API docs ↗</a>
         </div>
-        <p class="hero-copy">Check a message or link before it reaches someone. Sentinel AI explains the risk and recommends a safe next step.</p>
+        <p class="hero-copy">Check a message, link, or screenshot before you act. Karna explains the risk and recommends a safe next step.</p>
       </header>
 
       <section class="workspace" aria-label="Threat analysis workspace">
@@ -31,7 +31,9 @@
           <textarea id="message" name="message" maxlength="10000" placeholder="Paste a message you want to check…"></textarea>
           <label for="urls">URLs <span>one link per line</span></label>
           <textarea id="urls" name="urls" class="url-input" placeholder="https://example.com"></textarea>
-          <p class="privacy-note">Sentinel AI evaluates signals locally. The baseline analyzer does not open submitted links.</p>
+          <label for="image">Image or screenshot <span>JPG, PNG, WEBP — max 5 MB</span></label>
+          <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" />
+          <p class="privacy-note">Karna does not open submitted links or store uploads. Personal safety results are advisory; you remain in control.</p>
           <button id="submit-button" type="submit">Analyze safety <span>→</span></button>
         </form>
 
@@ -70,7 +72,7 @@
       </section>
 
       <footer>
-        <span>Sentinel AI is advisory security analysis, not an enforcement decision.</span>
+        <span>Karna is advisory security analysis, not device-level protection or enforcement.</span>
         <a href="/health" target="_blank" rel="noreferrer">Service health</a>
       </footer>
     </main>

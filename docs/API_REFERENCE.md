@@ -4,7 +4,7 @@
 
 Checks supplied text and URLs for transparent baseline phishing, social-engineering, and suspicious-URL signals.
 
-Sentinel AI does **not** open, visit, or execute the URLs in this milestone. This avoids making a submitted link trigger an outbound request from the API.
+Karna does **not** open, visit, download, crawl, or execute submitted URLs. This avoids making a submitted link trigger an unsafe request from the API.
 
 ### Request
 
@@ -32,7 +32,7 @@ Provide `text`, `urls`, or both. At least one is required.
     }
   ],
   "confidence": 0.85,
-  "recommended_action": "block",
+  "recommended_action": "quarantine",
   "summary": "Critical risk: 3 signal(s) require attention."
 }
 ```
@@ -46,8 +46,18 @@ Provide `text`, `urls`, or both. At least one is required.
 | `threat_category` | The most likely detected concern |
 | `evidence` | The exact signals that informed the result |
 | `confidence` | The analyzer's confidence from 0 to 1 |
-| `recommended_action` | `allow`, `show_caution`, or `block` |
+| `recommended_action` | `allow`, `show_caution`, `block`, or `quarantine` |
+
+## `POST /analyze/image`
+
+Accepts a single `image` multipart field. JPG, PNG, and WEBP are supported up to 5 MB. Karna validates the type and size in memory and does not persist uploads.
+
+When `OPENAI_API_KEY` is configured, Karna can request an optional visual assessment for scam, fake-login, QR-risk, impersonation, and social-engineering cues. The image is sent to OpenAI only for that configured assessment; Karna does not persist the upload. Without the key, it returns a transparent fallback rather than claiming visual malware detection.
+
+## Optional enrichment
+
+When `VIRUSTOTAL_API_KEY` is configured, Karna can look up existing URL reputation data. It never opens, downloads, executes, or crawls submitted URLs.
 
 ## Current limitations
 
-The current analyzer is rule-based and intentionally explainable. It does not replace human judgment, fetch URLs, perform malware scanning, or make claims about direct integration with third-party messaging platforms. OpenAI-assisted contextual analysis is planned for a later milestone.
+Karna is advisory and intentionally explainable. It does not replace human judgment, scan an entire device, remove malware, or directly integrate with third-party messaging platforms.
