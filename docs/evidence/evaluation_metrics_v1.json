@@ -1,0 +1,283 @@
+{
+  "dataset_version": "v1",
+  "evaluated_samples": 30,
+  "non_evaluable_image_samples": 4,
+  "exact_category_matches": 20,
+  "confusion_counts": {
+    "safe->safe": 3,
+    "safe->social_engineering": 1,
+    "safe->phishing": 1,
+    "phishing->phishing": 2,
+    "phishing->safe": 2,
+    "phishing->social_engineering": 2,
+    "social_engineering->social_engineering": 3,
+    "social_engineering->safe": 2,
+    "impersonation->impersonation": 2,
+    "impersonation->safe": 1,
+    "scam->scam": 2,
+    "scam->safe": 1,
+    "suspicious_url->suspicious_url": 5,
+    "malware_download->malware_download": 3
+  },
+  "metrics_by_category": {
+    "safe": {
+      "tp": 3,
+      "fp": 6,
+      "tn": 19,
+      "fn": 2,
+      "precision": 0.333,
+      "recall": 0.6,
+      "f1": 0.429,
+      "false_positive_rate": 0.24,
+      "sample_size": 30
+    },
+    "phishing": {
+      "tp": 2,
+      "fp": 1,
+      "tn": 23,
+      "fn": 4,
+      "precision": 0.667,
+      "recall": 0.333,
+      "f1": 0.444,
+      "false_positive_rate": 0.042,
+      "sample_size": 30
+    },
+    "social_engineering": {
+      "tp": 3,
+      "fp": 3,
+      "tn": 22,
+      "fn": 2,
+      "precision": 0.5,
+      "recall": 0.6,
+      "f1": 0.545,
+      "false_positive_rate": 0.12,
+      "sample_size": 30
+    },
+    "impersonation": {
+      "tp": 2,
+      "fp": 0,
+      "tn": 27,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.667,
+      "f1": 0.8,
+      "false_positive_rate": 0.0,
+      "sample_size": 30
+    },
+    "scam": {
+      "tp": 2,
+      "fp": 0,
+      "tn": 27,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.667,
+      "f1": 0.8,
+      "false_positive_rate": 0.0,
+      "sample_size": 30
+    },
+    "suspicious_url": {
+      "tp": 5,
+      "fp": 0,
+      "tn": 25,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "false_positive_rate": 0.0,
+      "sample_size": 30
+    },
+    "malware_download": {
+      "tp": 3,
+      "fp": 0,
+      "tn": 27,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "false_positive_rate": 0.0,
+      "sample_size": 30
+    }
+  },
+  "case_results": [
+    {
+      "id": "safe-001",
+      "expected_category": "safe",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "safe-002",
+      "expected_category": "safe",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "safe-003",
+      "expected_category": "safe",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "safe-004",
+      "expected_category": "safe",
+      "actual_category": "social_engineering",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "safe-005",
+      "expected_category": "safe",
+      "actual_category": "phishing",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "phishing-001",
+      "expected_category": "phishing",
+      "actual_category": "phishing",
+      "actual_action": "quarantine"
+    },
+    {
+      "id": "phishing-002",
+      "expected_category": "phishing",
+      "actual_category": "phishing",
+      "actual_action": "block"
+    },
+    {
+      "id": "phishing-003",
+      "expected_category": "phishing",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "phishing-004",
+      "expected_category": "phishing",
+      "actual_category": "social_engineering",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "phishing-005",
+      "expected_category": "phishing",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "phishing-006",
+      "expected_category": "phishing",
+      "actual_category": "social_engineering",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "social-001",
+      "expected_category": "social_engineering",
+      "actual_category": "social_engineering",
+      "actual_action": "block"
+    },
+    {
+      "id": "social-002",
+      "expected_category": "social_engineering",
+      "actual_category": "social_engineering",
+      "actual_action": "block"
+    },
+    {
+      "id": "social-003",
+      "expected_category": "social_engineering",
+      "actual_category": "social_engineering",
+      "actual_action": "block"
+    },
+    {
+      "id": "social-004",
+      "expected_category": "social_engineering",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "social-005",
+      "expected_category": "social_engineering",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "impersonation-001",
+      "expected_category": "impersonation",
+      "actual_category": "impersonation",
+      "actual_action": "quarantine"
+    },
+    {
+      "id": "impersonation-002",
+      "expected_category": "impersonation",
+      "actual_category": "impersonation",
+      "actual_action": "block"
+    },
+    {
+      "id": "impersonation-003",
+      "expected_category": "impersonation",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "scam-001",
+      "expected_category": "scam",
+      "actual_category": "scam",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "scam-002",
+      "expected_category": "scam",
+      "actual_category": "scam",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "scam-003",
+      "expected_category": "scam",
+      "actual_category": "safe",
+      "actual_action": "allow"
+    },
+    {
+      "id": "url-001",
+      "expected_category": "suspicious_url",
+      "actual_category": "suspicious_url",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "url-002",
+      "expected_category": "suspicious_url",
+      "actual_category": "suspicious_url",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "url-003",
+      "expected_category": "suspicious_url",
+      "actual_category": "suspicious_url",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "url-004",
+      "expected_category": "suspicious_url",
+      "actual_category": "suspicious_url",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "url-005",
+      "expected_category": "suspicious_url",
+      "actual_category": "suspicious_url",
+      "actual_action": "show_caution"
+    },
+    {
+      "id": "download-001",
+      "expected_category": "malware_download",
+      "actual_category": "malware_download",
+      "actual_action": "block"
+    },
+    {
+      "id": "download-002",
+      "expected_category": "malware_download",
+      "actual_category": "malware_download",
+      "actual_action": "block"
+    },
+    {
+      "id": "download-003",
+      "expected_category": "malware_download",
+      "actual_category": "malware_download",
+      "actual_action": "block"
+    }
+  ]
+}
