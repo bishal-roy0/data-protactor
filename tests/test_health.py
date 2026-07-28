@@ -17,6 +17,13 @@ def test_health_check_returns_service_status() -> None:
     }
 
 
+def test_dashboard_is_available() -> None:
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert "Sentinel AI" in response.text
+
+
 def test_analyze_rejects_empty_content() -> None:
     response = client.post("/analyze", json={})
 

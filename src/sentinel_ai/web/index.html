@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sentinel AI communication threat analysis dashboard." />
+    <title>Sentinel AI | Threat Analysis</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div class="brand-row">
+          <div class="brand-mark" aria-hidden="true">S</div>
+          <div>
+            <p class="eyebrow">COMMUNICATION SAFETY LAYER</p>
+            <h1>Sentinel <span>AI</span></h1>
+          </div>
+          <a class="docs-link" href="/docs" target="_blank" rel="noreferrer">API docs ↗</a>
+        </div>
+        <p class="hero-copy">Check a message or link before it reaches someone. Sentinel AI explains the risk and recommends a safe next step.</p>
+      </header>
+
+      <section class="workspace" aria-label="Threat analysis workspace">
+        <form id="analysis-form" class="analysis-card">
+          <div class="section-heading">
+            <p class="step">01 / INPUT</p>
+            <h2>Analyze content</h2>
+          </div>
+          <label for="message">Message text <span>optional if you add a URL</span></label>
+          <textarea id="message" name="message" maxlength="10000" placeholder="Paste a message you want to check…"></textarea>
+          <label for="urls">URLs <span>one link per line</span></label>
+          <textarea id="urls" name="urls" class="url-input" placeholder="https://example.com"></textarea>
+          <p class="privacy-note">Sentinel AI evaluates signals locally. The baseline analyzer does not open submitted links.</p>
+          <button id="submit-button" type="submit">Analyze safety <span>→</span></button>
+        </form>
+
+        <section class="result-card" aria-live="polite" aria-labelledby="result-title">
+          <div class="section-heading result-heading">
+            <p class="step">02 / ASSESSMENT</p>
+            <h2 id="result-title">Waiting for content</h2>
+          </div>
+          <div id="empty-result" class="empty-state">
+            <div class="radar" aria-hidden="true"></div>
+            <p>Submit a message or URL to see a clear risk assessment.</p>
+          </div>
+          <div id="result" hidden>
+            <div class="risk-summary">
+              <div id="risk-badge" class="risk-badge">SAFE</div>
+              <div>
+                <p class="score-label">RISK SCORE</p>
+                <p id="risk-score" class="risk-score">0<span>/100</span></p>
+              </div>
+              <div>
+                <p class="score-label">CONFIDENCE</p>
+                <p id="confidence" class="confidence">0%</p>
+              </div>
+            </div>
+            <div class="meter" aria-label="Risk score meter"><div id="meter-fill"></div></div>
+            <div class="result-grid">
+              <div><p class="score-label">CATEGORY</p><p id="category" class="result-value"></p></div>
+              <div><p class="score-label">RECOMMENDED ACTION</p><p id="action" class="result-value"></p></div>
+            </div>
+            <p id="summary" class="summary"></p>
+            <h3>Evidence</h3>
+            <ul id="evidence" class="evidence-list"></ul>
+          </div>
+          <p id="form-error" class="form-error" role="alert"></p>
+        </section>
+      </section>
+
+      <footer>
+        <span>Sentinel AI is advisory security analysis, not an enforcement decision.</span>
+        <a href="/health" target="_blank" rel="noreferrer">Service health</a>
+      </footer>
+    </main>
+    <script src="/assets/app.js"></script>
+  </body>
+</html>

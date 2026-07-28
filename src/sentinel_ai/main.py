@@ -1,4 +1,8 @@
+from pathlib import Path
+
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from sentinel_ai.api.routes import router
 from sentinel_ai.core.config import get_settings
@@ -16,6 +20,13 @@ def create_application() -> FastAPI:
     )
     application.include_router(router)
     application.add_exception_handler(Exception, unhandled_exception_handler)
+    web_directory = Path(__file__).parent / "web"
+    application.mount("/assets", StaticFiles(directory=web_directory / "assets"), name="assets")
+
+    @application.get("/", include_in_schema=False)
+    async def dashboard() -> FileResponse:
+        return FileResponse(web_directory / "index.html")
+
     return application
 
 

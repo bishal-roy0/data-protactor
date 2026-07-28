@@ -58,6 +58,7 @@ uvicorn sentinel_ai.main:app --reload
 
 The API is available at `http://127.0.0.1:8000`.
 
+- Safety dashboard: `http://127.0.0.1:8000/`
 - Interactive documentation: `http://127.0.0.1:8000/docs`
 - Health endpoint: `GET http://127.0.0.1:8000/health`
 - Threat analysis: `POST http://127.0.0.1:8000/analyze`
@@ -82,6 +83,10 @@ pytest
 ## Contributing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before making changes. It explains the project conventions, test command, and where each type of change belongs.
+
+## Deploy to Render
+
+This repository includes `render.yaml`. In Render, create a **Blueprint** from this GitHub repository and select the `main` branch. Render will install the dependencies, start the FastAPI service, and expose the dashboard and API through one public URL. The configured health check is `/health`.
 
 ## Planned next milestone
 
