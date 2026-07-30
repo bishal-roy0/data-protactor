@@ -10,6 +10,7 @@ from sentinel_ai.api.schemas import (
 )
 from sentinel_ai.core.config import get_settings
 from sentinel_ai.services.image_analyzer import ImageAnalyzer
+from sentinel_ai.services.qr_analyzer import QrAnalyzer
 from sentinel_ai.services.reputation import configured_reputation_providers
 from sentinel_ai.services.threat_analyzer import ThreatAnalyzer
 
@@ -87,6 +88,25 @@ async def analyze_content(payload: AnalyzeRequest) -> AnalyzeResponse:
 )
 async def analyze_image(image: UploadFile = File(...)) -> AnalyzeResponse:
     """Validate an image in memory and optionally send it to configured OpenAI vision analysis."""
+    image_bytes = await _validated_image_bytes(image)
+    settings = get_settings()
+    return await ImageAnalyzer(settings.openai_api_key, settings.openai_vision_model).analyze(image_bytes, image.content_type)
+
+
+@router.post(
+    "/analyze/qr",
+    response_model=AnalyzeResponse,
+    status_code=status.HTTP_200_OK,
+    tags=["Threat analysis"],
+    summary="Decode and assess a submitted QR code without visiting its destination",
+)
+async def analyze_qr(image: UploadFile = File(...)) -> AnalyzeResponse:
+    """Validate, decode, and assess a QR image entirely in memory."""
+    image_bytes = await _validated_image_bytes(image)
+    return QrAnalyzer(threat_analyzer).analyze(image_bytes)
+
+
+async def _validated_image_bytes(image: UploadFile) -> bytes:
     allowed_types = {"image/jpeg", "image/png", "image/webp"}
     if image.content_type not in allowed_types:
         raise HTTPException(status_code=415, detail="Only JPG, PNG, and WEBP images are supported.")
@@ -95,8 +115,7 @@ async def analyze_image(image: UploadFile = File(...)) -> AnalyzeResponse:
         raise HTTPException(status_code=413, detail="Image size must not exceed 5 MB.")
     if not _has_valid_image_signature(image_bytes, image.content_type):
         raise HTTPException(status_code=415, detail="The file content does not match its declared image type.")
-    settings = get_settings()
-    return await ImageAnalyzer(settings.openai_api_key, settings.openai_vision_model).analyze(image_bytes, image.content_type)
+    return image_bytes
 
 
 def _has_valid_image_signature(image: bytes, content_type: str) -> bool:

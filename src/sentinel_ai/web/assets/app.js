@@ -34,15 +34,17 @@ form.addEventListener("submit", async (event) => {
   const text = document.querySelector("#message").value.trim();
   const urls = document.querySelector("#urls").value.split("\n").map((url) => url.trim()).filter(Boolean);
   const image = document.querySelector("#image").files[0];
-  if (!text && !urls.length && !image) { error.textContent = "Add a message, a URL, or an image before analyzing."; return; }
+  const qrImage = document.querySelector("#qr-image").files[0];
+  if (!text && !urls.length && !image && !qrImage) { error.textContent = "Add a message, a URL, an image, or a QR code before analyzing."; return; }
+  if ((image && qrImage) || ((text || urls.length) && (image || qrImage))) { error.textContent = "Submit text and URLs together, or choose one image or QR code for this scan."; return; }
   submitButton.disabled = true;
   submitButton.innerHTML = "Checking signals…";
   try {
     let response;
-    if (image) {
+    if (image || qrImage) {
       const imageForm = new FormData();
-      imageForm.append("image", image);
-      response = await fetch("/analyze/image", { method: "POST", body: imageForm });
+      imageForm.append("image", image || qrImage);
+      response = await fetch(qrImage ? "/analyze/qr" : "/analyze/image", { method: "POST", body: imageForm });
     } else {
       response = await fetch("/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: text || null, urls }) });
     }

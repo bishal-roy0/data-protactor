@@ -37,6 +37,9 @@
           <textarea id="urls" name="urls" class="url-input" placeholder="https://example.com"></textarea>
           <label for="image">Image or screenshot <span>JPG, PNG, WEBP — max 5 MB</span></label>
           <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" />
+          <label for="qr-image">QR code <span>JPG, PNG, WEBP; decoded locally; max 5 MB</span></label>
+          <input id="qr-image" name="qr-image" type="file" accept="image/jpeg,image/png,image/webp" />
+          <p class="privacy-note">For QR codes, Karna decodes the destination in memory and analyzes it without opening the link. Choose either an image or a QR code for one scan.</p>
           <p class="privacy-note">Karna does not open submitted links or store uploads. Personal safety results are advisory; you remain in control.</p>
           <button id="submit-button" type="submit">Analyze safety <span>→</span></button>
         </form>

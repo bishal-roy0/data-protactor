@@ -63,6 +63,21 @@ TEXT_RULES = (
         weight=30,
         category=ThreatCategory.SCAM,
     ),
+    DetectionRule(
+        terms=("share your access", "share your login", "send me the code", "send the code"),
+        signal="Sensitive-access request",
+        explanation="The message asks for access or a code that should not be shared outside a verified process.",
+        weight=20,
+        category=ThreatCategory.PHISHING,
+    ),
+)
+EMOTIONAL_PRETEXT_TERMS = (
+    "worried about your job", "boss is really angry", "heard your company is downsizing",
+    "sorry to hear about your loss", "feeling really stressed", "don't miss out",
+)
+RISKY_REQUEST_TERMS = (
+    "verify your details", "verify your identity", "share your access", "share your login",
+    "send me the code", "send the code", "send your password", "send your otp",
 )
 
 KNOWN_BRANDS = {
@@ -114,6 +129,17 @@ class ThreatAnalyzer:
                         weight=rule.weight,
                     )
                 )
+        if (
+            any(term in normalized_text for term in EMOTIONAL_PRETEXT_TERMS)
+            and any(term in normalized_text for term in RISKY_REQUEST_TERMS)
+        ):
+            evidence.append(
+                ThreatEvidence(
+                    signal="Emotional-pressure pretext",
+                    explanation="The message combines fear, loss, workplace pressure, or scarcity with a sensitive request. Verify the sender through a trusted channel before acting.",
+                    weight=20,
+                )
+            )
         return evidence
 
     def _analyze_urls(self, urls: list[str]) -> list[ThreatEvidence]:
