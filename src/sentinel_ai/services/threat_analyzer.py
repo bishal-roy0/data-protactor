@@ -74,6 +74,8 @@ KNOWN_BRANDS = {
     "paypal": ("paypal.com",),
 }
 URL_SHORTENERS = {"bit.ly", "cutt.ly", "is.gd", "rb.gy", "t.co", "tinyurl.com"}
+PROMOTION_LURE_TERMS = {"bonus", "cashback", "giveaway", "reward", "refund"}
+HIGH_RISK_PROMOTION_TLDS = {".click", ".link", ".shop", ".top", ".xyz"}
 REDIRECT_PARAMETERS = {"continue", "destination", "next", "redirect", "target", "url"}
 CREDENTIAL_PATH_TERMS = {"account", "login", "otp", "password", "reset", "signin", "verify"}
 PAYMENT_PATH_TERMS = {"bank", "crypto", "delivery", "gift", "lottery", "payment", "prize", "support"}
@@ -155,6 +157,11 @@ class ThreatAnalyzer:
             evidence.append(self._evidence("Suspicious hyphenated domain", "Multiple hyphens in a domain label can be used to imitate a brand or login destination.", 15))
         if any(len(label) >= 14 and sum(character.isdigit() for character in label) >= 3 for label in labels):
             evidence.append(self._evidence("Random-looking domain label", "A long domain label with several digits can make a destination harder to recognize.", 15))
+        if (
+            any(term in host for term in PROMOTION_LURE_TERMS)
+            and any(host.endswith(tld) for tld in HIGH_RISK_PROMOTION_TLDS)
+        ):
+            evidence.append(self._evidence("Suspicious reward-lure domain", "The domain combines a financial reward or cashback lure with a generic top-level domain often used for short-lived promotions. Verify the offer through the official provider.", 45))
         for brand, official_domains in KNOWN_BRANDS.items():
             if any(host == domain or host.endswith(f".{domain}") for domain in official_domains):
                 continue

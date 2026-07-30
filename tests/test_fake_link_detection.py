@@ -19,6 +19,7 @@ client = TestClient(app)
     ("url", "signal"),
     [
         ("https://paypa1-login.example/signin", "Possible brand impersonation"),
+        ("https://nu-cashback.link/", "Suspicious reward-lure domain"),
         ("https://amazon-account-verify.example/login", "Possible brand impersonation"),
         ("https://xn--e1afmkfd.xn--p1ai/", "Encoded domain"),
         ("https://192.0.2.12/", "IP-address URL"),
@@ -56,6 +57,15 @@ def test_legitimate_urls_do_not_trigger_brand_impersonation(url: str) -> None:
 
     assert response.status_code == 200
     assert "Possible brand impersonation" not in {
+        item["signal"] for item in response.json()["evidence"]
+    }
+
+
+def test_reward_word_without_high_risk_domain_pattern_is_not_flagged() -> None:
+    response = client.post("/analyze", json={"urls": ["https://offers.example/cashback"]})
+
+    assert response.status_code == 200
+    assert "Suspicious reward-lure domain" not in {
         item["signal"] for item in response.json()["evidence"]
     }
 

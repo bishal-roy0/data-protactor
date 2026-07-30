@@ -81,6 +81,10 @@ The public response schema included `scam`, but the baseline detector had no cor
 
 These are not hidden. They are retained in the dataset so future work can measure improvement without silently weakening the audit.
 
+### Post-audit regression: suspicious cashback lure
+
+The user-reported URL pattern `nu-cashback.link` initially had no matching structural signal. Karna now flags financial reward terms such as `cashback` only when they are combined with selected generic promotion-oriented top-level domains such as `.link`. The response is `suspicious_url` with a `block` action; this is a structural warning, not a claim that Karna has opened or proven malicious behavior on the site.
+
 ## Security and failure-path checks
 
 - The rule-based URL analyzer does not open, crawl, download, or execute submitted URLs.

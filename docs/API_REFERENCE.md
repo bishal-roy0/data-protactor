@@ -65,7 +65,7 @@ When `VIRUSTOTAL_API_KEY` is configured, Karna can look up existing URL reputati
 
 ## Fake-link analysis
 
-Karna performs local structural checks for look-alike brand domains, encoded domains, IP-address URLs, misleading authority syntax, redirect and nested URLs, URL shorteners, credential-harvesting paths, payment lures, deceptive media links, and download indicators. A clean result means no current signals matched; it does not guarantee a link is safe.
+Karna performs local structural checks for look-alike brand domains, encoded domains, IP-address URLs, misleading authority syntax, redirect and nested URLs, URL shorteners, credential-harvesting paths, payment lures, suspicious cashback or reward-lure domains, deceptive media links, and download indicators. A clean result means no current signals matched; it does not guarantee a link is safe.
 
 ## Current limitations
 
