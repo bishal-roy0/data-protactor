@@ -33,8 +33,8 @@ client = TestClient(app)
             "impersonation",
             "quarantine",
         ),
-        ({"urls": ["https://xn--e1afmkfd.xn--p1ai/login"]}, "suspicious_url", "show_caution"),
-        ({"urls": ["https://192.0.2.12/login"]}, "suspicious_url", "show_caution"),
+        ({"urls": ["https://xn--e1afmkfd.xn--p1ai/login"]}, "phishing", "block"),
+        ({"urls": ["https://192.0.2.12/login"]}, "phishing", "block"),
         (
             {"urls": ["https://example.com/continue?redirect=https://other.example"]},
             "suspicious_url",

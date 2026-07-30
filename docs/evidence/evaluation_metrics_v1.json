@@ -7,7 +7,7 @@
     "safe->safe": 3,
     "safe->social_engineering": 1,
     "safe->phishing": 1,
-    "phishing->phishing": 2,
+    "phishing->phishing": 5,
     "phishing->safe": 2,
     "phishing->social_engineering": 2,
     "social_engineering->social_engineering": 3,
@@ -16,7 +16,7 @@
     "impersonation->safe": 1,
     "scam->scam": 2,
     "scam->safe": 1,
-    "suspicious_url->suspicious_url": 5,
+    "suspicious_url->suspicious_url": 2,
     "malware_download->malware_download": 3
   },
   "metrics_by_category": {
@@ -32,14 +32,14 @@
       "sample_size": 30
     },
     "phishing": {
-      "tp": 2,
+      "tp": 5,
       "fp": 1,
-      "tn": 23,
+      "tn": 20,
       "fn": 4,
-      "precision": 0.667,
-      "recall": 0.333,
-      "f1": 0.444,
-      "false_positive_rate": 0.042,
+      "precision": 0.833,
+      "recall": 0.556,
+      "f1": 0.667,
+      "false_positive_rate": 0.048,
       "sample_size": 30
     },
     "social_engineering": {
@@ -76,9 +76,9 @@
       "sample_size": 30
     },
     "suspicious_url": {
-      "tp": 5,
+      "tp": 2,
       "fp": 0,
-      "tn": 25,
+      "tn": 28,
       "fn": 0,
       "precision": 1.0,
       "recall": 1.0,
@@ -233,15 +233,15 @@
     },
     {
       "id": "url-001",
-      "expected_category": "suspicious_url",
-      "actual_category": "suspicious_url",
-      "actual_action": "show_caution"
+      "expected_category": "phishing",
+      "actual_category": "phishing",
+      "actual_action": "block"
     },
     {
       "id": "url-002",
-      "expected_category": "suspicious_url",
-      "actual_category": "suspicious_url",
-      "actual_action": "show_caution"
+      "expected_category": "phishing",
+      "actual_category": "phishing",
+      "actual_action": "block"
     },
     {
       "id": "url-003",
@@ -257,9 +257,9 @@
     },
     {
       "id": "url-005",
-      "expected_category": "suspicious_url",
-      "actual_category": "suspicious_url",
-      "actual_action": "show_caution"
+      "expected_category": "phishing",
+      "actual_category": "phishing",
+      "actual_action": "block"
     },
     {
       "id": "download-001",
