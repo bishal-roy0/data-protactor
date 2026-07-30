@@ -24,6 +24,7 @@ client = TestClient(app)
         ("https://xn--e1afmkfd.xn--p1ai/", "Encoded domain"),
         ("https://192.0.2.12/", "IP-address URL"),
         ("https://10.196.252.46.host.secureserver.net/pdf/", "IP-address-style subdomain"),
+        ("https://mahjxs.us.cc/5g/home.html", "Opaque free-subdomain host"),
         ("https://trusted.example@malicious.example/login", "Misleading URL authority"),
         ("https://example.com/?destination=https%3A%2F%2Fevil.example", "Redirect-style URL"),
         ("https://bit.ly/example", "URL shortener"),

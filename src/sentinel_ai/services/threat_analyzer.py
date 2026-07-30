@@ -91,6 +91,7 @@ KNOWN_BRANDS = {
 URL_SHORTENERS = {"bit.ly", "cutt.ly", "is.gd", "rb.gy", "t.co", "tinyurl.com"}
 PROMOTION_LURE_TERMS = {"bonus", "cashback", "giveaway", "reward", "refund"}
 HIGH_RISK_PROMOTION_TLDS = {".click", ".link", ".shop", ".top", ".xyz"}
+FREE_SUBDOMAIN_SUFFIXES = {".us.cc"}
 REDIRECT_PARAMETERS = {"continue", "destination", "next", "redirect", "target", "url"}
 CREDENTIAL_PATH_TERMS = {"account", "login", "otp", "password", "reset", "signin", "verify"}
 PAYMENT_PATH_TERMS = {"bank", "crypto", "delivery", "gift", "lottery", "payment", "prize", "support"}
@@ -190,6 +191,8 @@ class ThreatAnalyzer:
             and any(host.endswith(tld) for tld in HIGH_RISK_PROMOTION_TLDS)
         ):
             evidence.append(self._evidence("Suspicious reward-lure domain", "The domain combines a financial reward or cashback lure with a generic top-level domain often used for short-lived promotions. Verify the offer through the official provider.", 45))
+        if any(host.endswith(suffix) for suffix in FREE_SUBDOMAIN_SUFFIXES) and self._looks_opaque_label(labels[0]):
+            evidence.append(self._evidence("Opaque free-subdomain host", "The URL uses a random-looking hostname beneath a free subdomain service. This can make a short-lived destination difficult to verify.", 45))
         for brand, official_domains in KNOWN_BRANDS.items():
             if any(host == domain or host.endswith(f".{domain}") for domain in official_domains):
                 continue
@@ -235,6 +238,10 @@ class ThreatAnalyzer:
     @staticmethod
     def _has_ip_style_subdomain(labels: list[str]) -> bool:
         return len(labels) > 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in labels[:4])
+
+    @staticmethod
+    def _looks_opaque_label(label: str) -> bool:
+        return len(label) >= 6 and sum(character in "aeiou" for character in label) <= 1
 
     @staticmethod
     def _risk_level(score: int) -> RiskLevel:
