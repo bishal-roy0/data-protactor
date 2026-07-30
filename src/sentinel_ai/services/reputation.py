@@ -1,10 +1,17 @@
 """Optional URL reputation enrichment without visiting supplied URLs."""
 
 import base64
+from typing import Protocol
 
 import httpx
 
 from sentinel_ai.api.schemas import ThreatEvidence
+
+
+class UrlReputationProvider(Protocol):
+    """Contract for optional providers that return existing URL reputation only."""
+
+    async def evidence_for(self, urls: list[str]) -> list[ThreatEvidence]: ...
 
 
 class VirusTotalReputationService:
@@ -45,3 +52,9 @@ class VirusTotalReputationService:
         except httpx.HTTPError:
             return evidence
         return evidence
+
+
+def configured_reputation_providers(api_key: str | None) -> tuple[UrlReputationProvider, ...]:
+    """Return only configured providers; an empty tuple preserves local analysis."""
+
+    return (VirusTotalReputationService(api_key),) if api_key else ()

@@ -9,4 +9,5 @@ body { margin: 0; min-width: 320px; background: radial-gradient(circle at 15% 0%
 @media (max-width: 760px) { .shell { padding: 25px 16px; }.workspace { grid-template-columns: 1fr; }.analysis-card,.result-card { min-height: auto; }.hero { padding-bottom: 25px; }.docs-link { font-size: .8rem; }.result-grid { grid-template-columns: 1fr; }.risk-summary { gap: 15px; }.risk-badge { min-width: 74px; }.risk-score,.confidence { font-size: 1.3rem; } footer { flex-direction: column; } }
 
 .analysis-card input[type="file"] { width: 100%; padding: 11px; border: 1px dashed #2b3b5d; border-radius: 12px; background: #080e1c; color: var(--muted); }
+.source-label { margin-top: 18px !important; }
 .android-download { margin-top: 1.25rem; }.android-download p { color: var(--muted); font-size: .9rem; }.download-link { display: inline-block; border: 1px solid var(--blue); border-radius: .5rem; color: var(--blue); padding: .65rem .9rem; text-decoration: none; }.download-link.is-disabled { border-color: #526074; color: #8994a7; cursor: not-allowed; pointer-events: none; }

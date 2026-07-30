@@ -82,3 +82,7 @@ class AnalyzeResponse(BaseModel):
     confidence: float = Field(ge=0, le=1)
     recommended_action: RecommendedAction
     summary: str
+    analysis_sources: list[str] = Field(
+        default_factory=lambda: ["local_rules"],
+        description="Non-sensitive analysis capabilities that informed this result.",
+    )

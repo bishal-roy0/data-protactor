@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from urllib.parse import parse_qsl, unquote, urlsplit
 
 from sentinel_ai.api.schemas import (
     AnalyzeRequest,
@@ -64,6 +65,20 @@ TEXT_RULES = (
     ),
 )
 
+KNOWN_BRANDS = {
+    "amazon": ("amazon.com",),
+    "apple": ("apple.com",),
+    "google": ("google.com",),
+    "microsoft": ("microsoft.com",),
+    "netflix": ("netflix.com",),
+    "paypal": ("paypal.com",),
+}
+URL_SHORTENERS = {"bit.ly", "cutt.ly", "is.gd", "rb.gy", "t.co", "tinyurl.com"}
+REDIRECT_PARAMETERS = {"continue", "destination", "next", "redirect", "target", "url"}
+CREDENTIAL_PATH_TERMS = {"account", "login", "otp", "password", "reset", "signin", "verify"}
+PAYMENT_PATH_TERMS = {"bank", "crypto", "delivery", "gift", "lottery", "payment", "prize", "support"}
+DOWNLOAD_EXTENSIONS = (".apk", ".bat", ".cmd", ".dmg", ".exe", ".iso", ".msi", ".rar", ".scr", ".zip")
+
 
 class ThreatAnalyzer:
     """Rule-based baseline analyzer that never fetches supplied URLs."""
@@ -82,6 +97,7 @@ class ThreatAnalyzer:
             confidence=self._confidence(evidence),
             recommended_action=self._recommended_action(risk_level),
             summary=self._summary(risk_level, evidence),
+            analysis_sources=["local_rules"],
         )
 
     def _analyze_text(self, text: str) -> list[ThreatEvidence]:
@@ -101,57 +117,80 @@ class ThreatAnalyzer:
     def _analyze_urls(self, urls: list[str]) -> list[ThreatEvidence]:
         evidence: list[ThreatEvidence] = []
         for url in urls:
-            host = url.split("//", maxsplit=1)[-1].split("/", maxsplit=1)[0].casefold()
-            if "@" in url.split("//", maxsplit=1)[-1].split("/", maxsplit=1)[0]:
-                evidence.append(
-                    ThreatEvidence(
-                        signal="Misleading URL authority",
-                        explanation="The URL contains an @ character before the path, which can hide the actual destination host.",
-                        weight=35,
-                    )
-                )
+            parsed = urlsplit(url)
+            host = (parsed.hostname or "").casefold()
+            authority = url.split("//", maxsplit=1)[-1].split("/", maxsplit=1)[0]
+            if "@" in authority:
+                evidence.append(self._evidence("Misleading URL authority", "The URL contains an @ character before the path, which can hide the actual destination host.", 35))
             if host.startswith("xn--") or ".xn--" in host:
-                evidence.append(
-                    ThreatEvidence(
-                        signal="Internationalized domain name",
-                        explanation="This URL uses an encoded domain name. It may be legitimate, but it can also be used to imitate trusted brands.",
-                        weight=20,
-                    )
-                )
+                evidence.append(self._evidence("Encoded domain", "The domain uses an encoded format that can hide look-alike characters.", 20))
             if self._is_ipv4_host(host):
-                evidence.append(
-                    ThreatEvidence(
-                        signal="IP-address URL",
-                        explanation="The URL uses a numeric IP address instead of a domain name, which can make the destination harder to recognize.",
-                        weight=20,
-                    )
-                )
+                evidence.append(self._evidence("IP-address URL", "The URL uses a numeric IP address instead of a domain name, which can make the destination harder to recognize.", 20))
             lowered_url = url.casefold()
-            if any(parameter in lowered_url for parameter in ("?url=", "?redirect=", "?next=", "?continue=")):
-                evidence.append(
-                    ThreatEvidence(
-                        signal="Redirect-style URL",
-                        explanation="The link contains a redirect parameter that can conceal its final destination.",
-                        weight=20,
-                    )
-                )
-            if any(lowered_url.split("?", maxsplit=1)[0].endswith(extension) for extension in (".exe", ".msi", ".apk", ".dmg", ".iso", ".scr", ".bat", ".cmd", ".zip", ".rar")):
-                evidence.append(
-                    ThreatEvidence(
-                        signal="Executable or archive download link",
-                        explanation="The URL points to a downloadable executable or archive. Verify the publisher before downloading.",
-                        weight=45,
-                    )
-                )
-            if any(marker in lowered_url for marker in ("private-video", "watch-now", "video-download")):
-                evidence.append(
-                    ThreatEvidence(
-                        signal="Potentially deceptive media link",
-                        explanation="The media-link wording is commonly used to lure recipients to unverified destinations.",
-                        weight=20,
-                    )
-                )
+            evidence.extend(self._domain_evidence(host))
+            evidence.extend(self._query_evidence(parsed.query, lowered_url))
+            if host in URL_SHORTENERS:
+                evidence.append(self._evidence("URL shortener", "Shortened links conceal the destination until they are expanded by a trusted service.", 20))
+            if any(lowered_url.split("?", maxsplit=1)[0].endswith(extension) for extension in DOWNLOAD_EXTENSIONS):
+                evidence.append(self._evidence("Executable or archive download link", "The URL points to a downloadable executable or archive. Verify the publisher before downloading.", 45))
+            path_and_query = f"{parsed.path}?{parsed.query}".casefold()
+            if any(term in path_and_query for term in CREDENTIAL_PATH_TERMS):
+                evidence.append(self._evidence("Credential-harvesting URL", "The URL contains login, account, password, verification, or OTP wording that can be used to imitate a sign-in page.", 30))
+            if any(term in path_and_query for term in PAYMENT_PATH_TERMS):
+                evidence.append(self._evidence("Payment or prize lure URL", "The URL contains payment, prize, delivery, bank, crypto, or support wording commonly used in scam lures.", 20))
+            if any(marker in lowered_url for marker in ("adult-lure", "private-video", "video-download", "watch-now")):
+                evidence.append(self._evidence("Potentially deceptive media link", "The media-link wording is commonly used to lure recipients to unverified destinations.", 20))
         return evidence
+
+    @staticmethod
+    def _evidence(signal: str, explanation: str, weight: int) -> ThreatEvidence:
+        return ThreatEvidence(signal=signal, explanation=explanation, weight=weight)
+
+    def _domain_evidence(self, host: str) -> list[ThreatEvidence]:
+        evidence: list[ThreatEvidence] = []
+        labels = host.split(".")
+        if len(labels) > 4:
+            evidence.append(self._evidence("Excessive subdomains", "The domain has an unusually deep subdomain structure that can obscure the registered destination.", 15))
+        if any(label.count("-") >= 2 for label in labels):
+            evidence.append(self._evidence("Suspicious hyphenated domain", "Multiple hyphens in a domain label can be used to imitate a brand or login destination.", 15))
+        if any(len(label) >= 14 and sum(character.isdigit() for character in label) >= 3 for label in labels):
+            evidence.append(self._evidence("Random-looking domain label", "A long domain label with several digits can make a destination harder to recognize.", 15))
+        for brand, official_domains in KNOWN_BRANDS.items():
+            if any(host == domain or host.endswith(f".{domain}") for domain in official_domains):
+                continue
+            label_parts = [part for label in labels for part in label.split("-")]
+            if brand in host or any(
+                self._edit_distance(label, brand) == 1
+                for label in label_parts
+                if len(label) >= 4
+            ):
+                evidence.append(self._evidence("Possible brand impersonation", "The domain closely resembles a well-known brand but is not an official domain.", 35))
+                break
+        return evidence
+
+    def _query_evidence(self, query: str, lowered_url: str) -> list[ThreatEvidence]:
+        evidence: list[ThreatEvidence] = []
+        decoded_query = unquote(query).casefold()
+        parameters = {key.casefold(): value.casefold() for key, value in parse_qsl(query, keep_blank_values=True)}
+        if any(parameter in REDIRECT_PARAMETERS for parameter in parameters):
+            evidence.append(self._evidence("Redirect-style URL", "The link contains a redirect parameter that can conceal its final destination.", 20))
+        if "http://" in decoded_query or "https://" in decoded_query:
+            evidence.append(self._evidence("Nested destination URL", "The link contains another URL in its query, which can hide the final destination.", 20))
+        if "%" in query or "%" in lowered_url:
+            evidence.append(self._evidence("Encoded URL content", "The URL contains encoded content that can obscure a destination or request.", 15))
+        return evidence
+
+    @staticmethod
+    def _edit_distance(first: str, second: str) -> int:
+        if abs(len(first) - len(second)) > 1:
+            return 2
+        previous = list(range(len(second) + 1))
+        for first_index, first_character in enumerate(first, start=1):
+            current = [first_index]
+            for second_index, second_character in enumerate(second, start=1):
+                current.append(min(current[-1] + 1, previous[second_index] + 1, previous[second_index - 1] + (first_character != second_character)))
+            previous = current
+        return previous[-1]
 
     @staticmethod
     def _is_ipv4_host(host: str) -> bool:
@@ -176,7 +215,7 @@ class ThreatAnalyzer:
             return ThreatCategory.SAFE
         if any("download" in item.signal.lower() for item in evidence):
             return ThreatCategory.MALWARE_DOWNLOAD
-        if any(item.signal == "Credential request" for item in evidence):
+        if any("credential" in item.signal.lower() for item in evidence):
             return ThreatCategory.PHISHING
         if any("impersonation" in item.signal.lower() for item in evidence):
             return ThreatCategory.IMPERSONATION

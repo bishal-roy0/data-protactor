@@ -10,7 +10,7 @@ from sentinel_ai.api.schemas import (
 )
 from sentinel_ai.core.config import get_settings
 from sentinel_ai.services.image_analyzer import ImageAnalyzer
-from sentinel_ai.services.reputation import VirusTotalReputationService
+from sentinel_ai.services.reputation import configured_reputation_providers
 from sentinel_ai.services.threat_analyzer import ThreatAnalyzer
 
 router = APIRouter(tags=["System"])
@@ -55,9 +55,9 @@ async def analyze_content(payload: AnalyzeRequest) -> AnalyzeResponse:
 
     response = threat_analyzer.analyze(payload)
     settings = get_settings()
-    reputation_evidence = await VirusTotalReputationService(
-        settings.virustotal_api_key
-    ).evidence_for([str(url) for url in payload.urls])
+    reputation_evidence = []
+    for provider in configured_reputation_providers(settings.virustotal_api_key):
+        reputation_evidence.extend(await provider.evidence_for([str(url) for url in payload.urls]))
     if not reputation_evidence:
         return response
     combined_score = min(response.risk_score + sum(item.weight for item in reputation_evidence), 100)
@@ -73,6 +73,7 @@ async def analyze_content(payload: AnalyzeRequest) -> AnalyzeResponse:
                 else RecommendedAction.BLOCK
             ),
             "summary": "URL reputation evidence was added to the local safety assessment.",
+            "analysis_sources": [*response.analysis_sources, "reputation_provider_available"],
         }
     )
 

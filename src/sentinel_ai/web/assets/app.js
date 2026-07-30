@@ -66,6 +66,7 @@ function renderResult(payload) {
   const meter = document.querySelector("#meter-fill"); meter.style.width = `${payload.risk_score}%`; meter.style.background = color;
   document.querySelector("#category").textContent = payload.threat_category.replaceAll("_", " ");
   document.querySelector("#action").textContent = payload.recommended_action.replaceAll("_", " ");
+  document.querySelector("#analysis-sources").textContent = (payload.analysis_sources || ["local_rules"]).map((source) => source.replaceAll("_", " ")).join(", ");
   document.querySelector("#summary").textContent = payload.summary;
   const evidence = document.querySelector("#evidence"); evidence.replaceChildren();
   if (!payload.evidence.length) evidence.innerHTML = "<li><strong>No suspicious signals detected.</strong> Continue to verify unexpected requests independently.</li>";
