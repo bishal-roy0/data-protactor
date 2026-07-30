@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
     openai_vision_model: str = "gpt-4.1-mini"
     virustotal_api_key: str | None = None
+    gophish_api_url: str | None = None
+    gophish_api_key: str | None = None
+    gophish_simulation_enabled: bool = False
     android_app_download_url: str | None = None
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
