@@ -23,6 +23,7 @@ client = TestClient(app)
         ("https://amazon-account-verify.example/login", "Possible brand impersonation"),
         ("https://xn--e1afmkfd.xn--p1ai/", "Encoded domain"),
         ("https://192.0.2.12/", "IP-address URL"),
+        ("https://10.196.252.46.host.secureserver.net/pdf/", "IP-address-style subdomain"),
         ("https://trusted.example@malicious.example/login", "Misleading URL authority"),
         ("https://example.com/?destination=https%3A%2F%2Fevil.example", "Redirect-style URL"),
         ("https://bit.ly/example", "URL shortener"),

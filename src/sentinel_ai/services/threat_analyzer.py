@@ -179,6 +179,8 @@ class ThreatAnalyzer:
         labels = host.split(".")
         if len(labels) > 4:
             evidence.append(self._evidence("Excessive subdomains", "The domain has an unusually deep subdomain structure that can obscure the registered destination.", 15))
+        if self._has_ip_style_subdomain(labels):
+            evidence.append(self._evidence("IP-address-style subdomain", "The hostname begins with four numeric labels that resemble an IP address but route through a different domain. This construction can obscure the real destination.", 35))
         if any(label.count("-") >= 2 for label in labels):
             evidence.append(self._evidence("Suspicious hyphenated domain", "Multiple hyphens in a domain label can be used to imitate a brand or login destination.", 15))
         if any(len(label) >= 14 and sum(character.isdigit() for character in label) >= 3 for label in labels):
@@ -229,6 +231,10 @@ class ThreatAnalyzer:
     def _is_ipv4_host(host: str) -> bool:
         parts = host.split(":", maxsplit=1)[0].split(".")
         return len(parts) == 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in parts)
+
+    @staticmethod
+    def _has_ip_style_subdomain(labels: list[str]) -> bool:
+        return len(labels) > 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in labels[:4])
 
     @staticmethod
     def _risk_level(score: int) -> RiskLevel:
