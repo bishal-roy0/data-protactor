@@ -47,6 +47,7 @@ Provide `text`, `urls`, or both. At least one is required.
 | `evidence` | The exact signals that informed the result |
 | `confidence` | The analyzer's confidence from 0 to 1 |
 | `recommended_action` | `allow`, `show_caution`, `block`, or `quarantine` |
+| `analysis_sources` | Non-sensitive capabilities used for the result, such as `local_rules` |
 
 ## `POST /analyze/image`
 
@@ -61,6 +62,10 @@ Returns only configuration that is safe for the public dashboard. At present it 
 ## Optional enrichment
 
 When `VIRUSTOTAL_API_KEY` is configured, Karna can look up existing URL reputation data. It never opens, downloads, executes, or crawls submitted URLs.
+
+## Fake-link analysis
+
+Karna performs local structural checks for look-alike brand domains, encoded domains, IP-address URLs, misleading authority syntax, redirect and nested URLs, URL shorteners, credential-harvesting paths, payment lures, deceptive media links, and download indicators. A clean result means no current signals matched; it does not guarantee a link is safe.
 
 ## Current limitations
 

@@ -27,6 +27,8 @@ Read [Accuracy and QA Report](docs/ACCURACY_AND_QA_REPORT.md) for reproducible b
 
 Read [Production Accuracy Evaluation Report](docs/ACCURACY_EVALUATION_REPORT.md) for the versioned v1 corpus, category metrics, security checks, audit fixes, and live-test screenshots.
 
+Read [GoPhish Simulation Boundary](docs/GOPHISH_SIMULATION.md) for the strict separation between authorized internal simulation fixtures and Karna's live detection API.
+
 ## Features in this milestone
 
 - FastAPI application factory and OpenAPI documentation
@@ -94,6 +96,8 @@ pytest
 `OPENAI_API_KEY` enables optional visual assessment for submitted images. `VIRUSTOTAL_API_KEY` enables an existing URL-reputation lookup. Both are optional: Karna continues to run its local, explainable analysis when either service is unavailable. Never commit real keys to GitHub.
 
 `ANDROID_APP_DOWNLOAD_URL` is optional and public. Set it only after you have a tested, signed Android release; otherwise the dashboard keeps its Android download control disabled.
+
+`GOPHISH_API_URL`, `GOPHISH_API_KEY`, and `GOPHISH_SIMULATION_ENABLED` are optional internal-test settings. They are never used by `POST /analyze`.
 
 ## Contributing
 

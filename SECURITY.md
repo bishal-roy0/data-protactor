@@ -16,5 +16,6 @@ Please do not publish suspected security vulnerabilities in a public issue. Cont
 - Images are validated in memory and are not persisted by Karna.
 - If optional OpenAI image analysis is enabled, uploaded image bytes are sent to OpenAI for that assessment; obtain appropriate authorization before enabling it.
 - The Android companion accepts only user-initiated Share Sheet content. Do not add background message collection or sensitive Android permissions without a separate privacy, platform-policy, and security review.
+- GoPhish settings are optional and must be used only for owner-authorized simulation fixtures. The live API never calls GoPhish, launches campaigns, manages targets, or captures credentials.
 - The API should not log submitted message content unless the deployment owner explicitly configures secure, privacy-aware logging.
 - Risk assessments are advisory. Integrating platforms remain responsible for their moderation and enforcement decisions.

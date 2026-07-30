@@ -33,6 +33,7 @@ The Android companion lives in `android/app/`: `MainActivity.kt` receives Androi
 | Change how startup is configured | `src/sentinel_ai/main.py` |
 | Change public branding or optional API keys | `src/sentinel_ai/core/config.py` and `.env.example` |
 | Change URL reputation behavior | `src/sentinel_ai/services/reputation.py` |
+| Change isolated GoPhish simulation fixtures | `src/sentinel_ai/services/gophish_simulation.py` |
 | Change image-analysis behavior | `src/sentinel_ai/services/image_analyzer.py` |
 | Change Android Share Sheet handling | `android/app/src/main/java/com/karna/companion/share/` |
 | Add a test | `tests/` |

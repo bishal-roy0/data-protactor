@@ -52,11 +52,11 @@ Metrics use one-vs-rest classification for each category. `TP` means the expecte
 | Category | TP | FP | TN | FN | Precision | Recall | F1 | False-positive rate | Sample size |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | safe | 3 | 6 | 19 | 2 | 0.333 | 0.600 | 0.429 | 0.240 | 30 |
-| phishing | 2 | 1 | 23 | 4 | 0.667 | 0.333 | 0.444 | 0.042 | 30 |
+| phishing | 5 | 1 | 20 | 4 | 0.833 | 0.556 | 0.667 | 0.048 | 30 |
 | social_engineering | 3 | 3 | 22 | 2 | 0.500 | 0.600 | 0.545 | 0.120 | 30 |
 | impersonation | 2 | 0 | 27 | 1 | 1.000 | 0.667 | 0.800 | 0.000 | 30 |
 | scam | 2 | 0 | 27 | 1 | 1.000 | 0.667 | 0.800 | 0.000 | 30 |
-| suspicious_url | 5 | 0 | 25 | 0 | 1.000 | 1.000 | 1.000 | 0.000 | 30 |
+| suspicious_url | 2 | 0 | 28 | 0 | 1.000 | 1.000 | 1.000 | 0.000 | 30 |
 | malware_download | 3 | 0 | 27 | 0 | 1.000 | 1.000 | 1.000 | 0.000 | 30 |
 
 These values are useful for regression comparison only. The URL values are based on five hand-selected structural cases and must not be generalized to all malicious or safe URLs.
@@ -89,6 +89,8 @@ These are not hidden. They are retained in the dataset so future work can measur
 - Unsupported image types and images over 5 MB are rejected.
 - Image uploads are processed in memory and are not persistently stored by the API.
 - `GET /config/public` exposes only the public Android download setting, never API keys.
+- The GoPhish adapter is tested only with mocked metadata and is not imported by live API routes. It returns only HTTPS fixture URLs when explicitly enabled and never returns campaign targets or provider errors.
+- A deceptive URL combined with login, account, OTP, password, reset, or verification wording is categorized as `phishing`; structural URL signals without credential-harvesting cues remain `suspicious_url`.
 
 ## Live test screenshots
 

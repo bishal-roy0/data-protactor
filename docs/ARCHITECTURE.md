@@ -33,6 +33,7 @@ flowchart LR
 | Defines valid JSON input and output | `src/sentinel_ai/api/schemas.py` |
 | Detects safety signals and calculates results | `src/sentinel_ai/services/threat_analyzer.py` |
 | Looks up optional URL reputation | `src/sentinel_ai/services/reputation.py` |
+| Reads authorized GoPhish fixture metadata only | `src/sentinel_ai/services/gophish_simulation.py` |
 | Analyzes validated images when configured | `src/sentinel_ai/services/image_analyzer.py` |
 | Android Share Sheet companion | `android/app/` |
 | Verifies endpoint behavior | `tests/test_health.py` |
@@ -42,3 +43,5 @@ flowchart LR
 The local baseline is deliberately deterministic and explainable. It is advisory, not a replacement for human review or antivirus software. It never crawls submitted URLs or performs a complete device or malware scan.
 
 The Android companion receives only content a person deliberately shares through Android's Share Sheet. It is not a direct integration with private messaging services and does not perform background scanning.
+
+The GoPhish simulation adapter is not connected to API routes and cannot run during normal user analysis. It exists only for authorized internal regression-fixture work.
