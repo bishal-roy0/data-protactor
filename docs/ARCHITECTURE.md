@@ -17,11 +17,11 @@ flowchart LR
 
 ## Request lifecycle
 
-1. A platform sends text, URLs, or both to `POST /analyze`, or an image to `POST /analyze/image`.
+1. A platform sends text, URLs, or both to `POST /analyze`, an image to `POST /analyze/image`, or a QR image to `POST /analyze/qr`.
 2. The API validates the shape and size of the request. Empty submissions are rejected with a clear `422` response.
 3. The baseline analyzer looks for explainable text signals, such as credential requests and urgency pressure.
 4. It examines only the structure of submitted URLs, including numeric IP hosts, encoded domains, redirect-style parameters, and download indicators. It does not open or fetch links. VirusTotal enrichment is optional and uses only its reputation API.
-5. Images are validated in memory. With an `OPENAI_API_KEY`, Karna can request an optional visual assessment; otherwise it returns a transparent keyless fallback.
+5. Images are validated in memory. With an `OPENAI_API_KEY`, Karna can request an optional visual assessment; otherwise it returns a transparent keyless fallback. QR images are decoded locally in memory; decoded web links go only to the existing no-crawl URL analyzer.
 6. The API combines the signals into a score from 0 to 100, assigns a risk level and recommended action, then returns the exact evidence that informed the result.
 
 ## Code-to-behavior map
@@ -35,6 +35,7 @@ flowchart LR
 | Looks up optional URL reputation | `src/sentinel_ai/services/reputation.py` |
 | Reads authorized GoPhish fixture metadata only | `src/sentinel_ai/services/gophish_simulation.py` |
 | Analyzes validated images when configured | `src/sentinel_ai/services/image_analyzer.py` |
+| Decodes and assesses QR destinations locally | `src/sentinel_ai/services/qr_analyzer.py` |
 | Android Share Sheet companion | `android/app/` |
 | Verifies endpoint behavior | `tests/test_health.py` |
 

@@ -35,6 +35,8 @@ The Android companion lives in `android/app/`: `MainActivity.kt` receives Androi
 | Change URL reputation behavior | `src/sentinel_ai/services/reputation.py` |
 | Change isolated GoPhish simulation fixtures | `src/sentinel_ai/services/gophish_simulation.py` |
 | Change image-analysis behavior | `src/sentinel_ai/services/image_analyzer.py` |
+| Change QR-code decoding or QR result behavior | `src/sentinel_ai/services/qr_analyzer.py` |
+| Audit external local datasets without copying them | `scripts/audit_external_datasets.py` |
 | Change Android Share Sheet handling | `android/app/src/main/java/com/karna/companion/share/` |
 | Add a test | `tests/` |
 | Explain a project decision | `docs/` |

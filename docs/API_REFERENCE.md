@@ -55,6 +55,12 @@ Accepts a single `image` multipart field. JPG, PNG, and WEBP are supported up to
 
 When `OPENAI_API_KEY` is configured, Karna can request an optional visual assessment for scam, fake-login, QR-risk, impersonation, and social-engineering cues. The image is sent to OpenAI only for that configured assessment; Karna does not persist the upload. Without the key, it returns a transparent fallback rather than claiming visual malware detection.
 
+## `POST /analyze/qr`
+
+Accepts a single `image` multipart field. JPG, PNG, and WEBP are supported up to 5 MB. Karna validates and decodes the QR code only in memory. If it contains an HTTP(S) URL, the existing local URL rules assess the decoded text; Karna never opens, crawls, downloads, or executes the destination.
+
+Non-web QR content is not executed or imported. It receives a caution result because Karna cannot safely assess the effect it may have in another application.
+
 ## `GET /config/public`
 
 Returns only configuration that is safe for the public dashboard. At present it can return `android_app_download_url`, the HTTPS address of a real signed Android release. It never returns OpenAI, VirusTotal, or other secret values.

@@ -29,6 +29,8 @@ Read [Production Accuracy Evaluation Report](docs/ACCURACY_EVALUATION_REPORT.md)
 
 Read [GoPhish Simulation Boundary](docs/GOPHISH_SIMULATION.md) for the strict separation between authorized internal simulation fixtures and Karna's live detection API.
 
+Read [Dataset Integration](docs/DATASET_INTEGRATION.md) for the offline message and QR dataset audit, data-provenance boundary, and safe QR analysis flow.
+
 ## Features in this milestone
 
 - FastAPI application factory and OpenAPI documentation
@@ -40,6 +42,10 @@ Read [GoPhish Simulation Boundary](docs/GOPHISH_SIMULATION.md) for the strict se
 - Automated health endpoint test
 - Automated threat-analysis endpoint tests
 - GitHub Actions workflow that runs tests on pushes and pull requests
+
+## Dataset-backed safety review
+
+Karna adds conservative message-manipulation rules and local QR-code destination analysis. The source datasets remain outside GitHub and are audited only with the offline tool documented in [Dataset Integration](docs/DATASET_INTEGRATION.md).
 
 ## Requirements
 
@@ -73,6 +79,7 @@ The API is available at `http://127.0.0.1:8000`.
 - Health endpoint: `GET http://127.0.0.1:8000/health`
 - Threat analysis: `POST http://127.0.0.1:8000/analyze`
 - Image threat analysis: `POST http://127.0.0.1:8000/analyze/image`
+- QR-code destination analysis: `POST http://127.0.0.1:8000/analyze/qr`
 
 Example response:
 
